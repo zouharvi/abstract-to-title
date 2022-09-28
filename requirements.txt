@@ -1,0 +1,6 @@
+openai
+retry
+tqdm
+pandas
+langdetect
+numpy
