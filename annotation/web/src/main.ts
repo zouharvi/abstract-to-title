@@ -1,6 +1,6 @@
 import { DEVMODE } from "./globals"
 export var UID: string
-import { load_data, log_data } from './connector'
+import { load_data } from './connector'
 import { setup, load_cur_abstract } from "./worker_website"
 
 globalThis.data_i = 0;

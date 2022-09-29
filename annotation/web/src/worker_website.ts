@@ -1,5 +1,3 @@
-import { IMGDATA_ROOT, log_data } from "./connector"
-
 let title_area_table = $("#title_area_table_body")
 
 function load_headers() {
@@ -62,7 +60,7 @@ function load_cur_abstract_all_direct() {
 function load_cur_abstract_all_direct_ref() {
     title_area_table.html("")
     title_area_table.append($("<tr><td>Title</td><td>Score</td></tr>"));
-    
+
     if (globalThis.data_now["titles_order"][0] != 0) {
         console.error(`The first in title in order is not 0 but ${globalThis.data_now["titles_order"][0]} and you requested reference comparison.`)
     }
@@ -179,8 +177,8 @@ function load_cur_abstract_all_rank() {
 
 function load_cur_abstract_all_rank_ref() {
     title_area_table.html("")
-    let radio_names = globalThis.data_now["titles_order"].map((_title_order: string, rank: number) => {
-        return `${rank + 1}`;
+    let radio_names = globalThis.data_now["titles_order"].filter((rank: number) => rank != 0).map((_title_order: string, rank: number) => {
+        return `${rank+1}`;
     }).join("&nbsp;&nbsp;&nbsp;");
     title_area_table.append($(`<tr><td>Title</td><td>Rank:<br>${radio_names}</td></tr>`));
 
@@ -198,6 +196,9 @@ function load_cur_abstract_all_rank_ref() {
         `)
         } else {
             let radios = globalThis.data_now["titles_order"].map((_title_order: string, rank: number) => {
+                // skip the first one, for reference
+                if (rank == 0)
+                    return "";
                 return `<input id="q_${title_i}_${rank}" name="titles_rank_${title_i}" title_rank="${rank}" type="radio" style="">`;
             }).join("");
             new_an = $(`
@@ -208,7 +209,7 @@ function load_cur_abstract_all_rank_ref() {
             `)
         }
         title_area_table.append(new_an);
-        bind_labels_rank(title_i, globalThis.data_now["titles_order"].length);
+        bind_labels_rank(title_i, globalThis.data_now["titles_order"].length, 1);
     })
 
     // todo this won't load correctly
@@ -260,8 +261,8 @@ function bind_labels_rank_pair(title_i: number) {
     });
 }
 
-function bind_labels_rank(title_i: number, title_total: number) {
-    for (let rank = 0; rank < title_total; rank++) {
+function bind_labels_rank(title_i: number, title_total: number, start_rank: number = 0) {
+    for (let rank = start_rank; rank < title_total; rank++) {
         $(`#q_${title_i}_${rank}`).on('input change', function () {
             let val = $(this).is(":checked") ? 1 : 0;
             if (val != 1) {
