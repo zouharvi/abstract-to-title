@@ -1,7 +1,7 @@
 import { DEVMODE } from "./globals"
 export var UID: string
 import { load_data, log_data } from './connector'
-import { setup, load_cur_img } from "./worker_website"
+import { setup, load_cur_abstract } from "./worker_website"
 
 globalThis.data_i = 0;
 globalThis.data = null
@@ -19,7 +19,8 @@ if (globalThis.uid == null) {
 
 load_data().then((data: any) => {
     globalThis.data = data
+    globalThis.data_now = globalThis.data[globalThis.data_i];
     setup()
-    load_cur_img()
+    load_cur_abstract()
 })
 

@@ -1,27 +1,20 @@
 import { DEVMODE } from './globals'
 
 let SERVER_LOG_ROOT = DEVMODE ? "http://127.0.0.1/" : "https://quest.ms.mff.cuni.cz/mmsg/"
+let SERVER_DATA_ROOT = DEVMODE ? "http://127.0.0.1:9000/queues/" : "https://vilda.net/s/diffusion-annotations/img_data/"
 export let IMGDATA_ROOT = "https://vilda.net/s/diffusion-annotations/img_data/"
 
 export async function load_data(): Promise<any> {
     let result = await $.ajax(
-        SERVER_LOG_ROOT + "get_log",
+        SERVER_DATA_ROOT + globalThis.uid + ".jsonl",
         {
-            data: JSON.stringify({ uid: globalThis.uid }),
-            type: 'POST',
-            contentType: 'application/json',
+            type: 'GET',
+            contentType: 'application/text',
         }
     )
 
-    result = JSON.parse(result)
-    if (result["new_user"] == "yes") {
-        alert(
-            "Your logfile was not found on the server and I'm serving you the default queue (all images). "
-            + "This may be an error if you were in contact with Vilém about this experiment before. "
-            + "Please make sure that your entered user id is correct and in case of repeated failure, contact Vilém."
-        )
-    }
-    return result["data"]
+    result = JSON.parse("[" + result.replace("\n", ",") + "]")
+    return result
 }
 
 // dumps all the data which is long-term unsustainable but since the image is not part of the payload

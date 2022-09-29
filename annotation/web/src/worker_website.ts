@@ -1,127 +1,145 @@
 import { IMGDATA_ROOT, log_data } from "./connector"
 
-let an_area_var = $("#an_area_var")
+let title_area_table = $("#title_area_table_body")
 
-function num_to_answer(num: number) {
-    switch (num) {
-        case -1:
-            return "?"
-        case 0:
-            return "Definitely no"
-        case 1:
-            return "Mostly no"
-        case 2:
-            return "Undecided"
-        case 3:
-            return "Mostly yes"
-        case 4:
-            return "Definitely yes"
-    }
+function load_headers() {
+    $("#progress").html(`
+        <strong>Progress:</strong> ${globalThis.data_i + 1}/${globalThis.data.length},
+        <strong>UID:</strong> ${globalThis.uid},
+        <strong>type:</strong> ${globalThis.data_now["type"]}
+    `)
+    $("#abstract").text(globalThis.data_now["abstract"])
 }
 
-function load_cur_img() {
-    // just an easy way to refer to this
-    const data = globalThis.data
-    const data_i = globalThis.data_i
+function load_cur_abstract() {
+    load_headers()
 
-    $("#progress").html(`
-        <strong>Progress:</strong> ${data_i + 1}/${data.length},
-        <strong>UID:</strong> ${globalThis.uid},
-        <strong>img:</strong> ${data[data_i]["img"]}
-    `)
-    $("#prompt").text(data[data_i]["prompt"])
-
-    $("#generated_img").html("<img src='" + IMGDATA_ROOT + data[data_i]["img"] + "'>")
-
-    an_area_var.html("")
-    data[data_i]["questions"].forEach((question: string, question_i: number) => {
+    switch (globalThis.data_now["type"]) {
+        case "all_direct": load_cur_abstract_all_direct(); break;
+        case "all_direct_ref": load_cur_abstract_all_direct_ref(); break;
+    }
+}
+    
+function load_cur_abstract_all_direct() {
+    title_area_table.html("")
+    globalThis.data_now["titles_order"].forEach((title_order: string, title_i: number) => {
         let new_an = $(`
-            <div>
-                <span>${question}</span>
-                <span id="q_${question_i}_val" class="slider_val">-</span>
-                <input id="q_${question_i}" type="range" min="0" max="4" step="1">
-            </div>
+            <tr>
+                <td>• ${globalThis.data_now["titles"][title_order]}</td>
+                <td><span id="q_${title_i}_val">x</span><input id="q_${title_i}" type="range" min="0" max="4" step="1"></td>
+            </tr>
         `)
-        an_area_var.append(new_an);
-        bind_labels(question_i);
+        title_area_table.append(new_an);
+        bind_labels(title_i);
     })
 
 
-    if (!data[data_i].hasOwnProperty("response")) {
-        data[data_i]["response"] = []
-        data[data_i]["questions"].forEach((question: string) => {
+    if (!globalThis.data_now.hasOwnProperty("response")) {
+        globalThis.data_now["response"] = []
+        globalThis.data_now["titles_order"].forEach((title: string) => {
             // set default response
-            data[data_i]["response"].push(-1);
+            globalThis.data_now["response"].push(-1);
         });
 
         // space for comments
-        data[data_i]["response"].push("")
+        globalThis.data_now["response"].push("")
     }
 
     // resets values
-    data[data_i]["questions"].forEach((question: string, question_i: number) => {
-        $("#q_" + question_i.toString()).val(data[data_i]["response"][question_i]);
-        $("#q_" + question_i.toString() + "_val").text(num_to_answer(data[data_i]["response"][question_i]));
+    globalThis.data_now["titles_order"].forEach((title: string, title_i: number) => {
+        $("#q_" + title_i.toString()).val(globalThis.data_now["response"][title_i]);
     })
-
-    $("#q_comment").val(data[data_i]["response"][data[data_i]["response"].length - 1])
-
 }
 
-function bind_labels(question_i: number) {
-    $("#q_" + question_i.toString()).on('input change', function () {
-        let val = parseInt($(this).val() as string);
-        globalThis.data[globalThis.data_i]["response"][question_i] = val;
+function load_cur_abstract_all_direct_ref() {
+    title_area_table.html("")
+    globalThis.data_now["titles_order"].forEach((title_order: string, title_i: number) => {
+        let new_an;
+        if (title_i == 0) {
+            new_an = $(`
+            <tr>
+                <td><b>Reference:</b> ${globalThis.data_now["titles"][title_order]}</td>
+            </tr>
+        `)
+        } else {
+            new_an = $(`
+                <tr>
+                    <td>• ${globalThis.data_now["titles"][title_order]}</td>
+                    <td><span id="q_${title_i}_val">x</span><input id="q_${title_i}" type="range" min="0" max="4" step="1"></td>
+                </tr>
+            `)
+        }
+        title_area_table.append(new_an);
+        bind_labels(title_i);
+    })
 
-        let slider_obj_val = $("#q_" + question_i.toString() + "_val");
-        slider_obj_val.text(num_to_answer(val))
+
+    if (!globalThis.data_now.hasOwnProperty("response")) {
+        globalThis.data_now["response"] = []
+        globalThis.data_now["titles_order"].forEach((title: string) => {
+            // set default response
+            globalThis.data_now["response"].push(-1);
+        });
+
+        // space for comments
+        globalThis.data_now["response"].push("")
+    }
+
+    // resets values
+    globalThis.data_now["titles_order"].forEach((title: string, title_i: number) => {
+        $("#q_" + title_i.toString()).val(globalThis.data_now["response"][title_i]);
+    })
+}
+
+function bind_labels(title_i: number) {
+    $("#q_" + title_i.toString()).on('input change', function () {
+        let val = parseInt($(this).val() as string);
+        globalThis.data_now["response"][title_i] = val;
+
+        let slider_obj_val = $("#q_" + title_i.toString() + "_val");
+        slider_obj_val.text(val)
     });
 
     // special handling of default "empty" value
-    $("#q_" + question_i.toString()).on('click', function () {
-        if (globalThis.data[globalThis.data_i]["response"][question_i] == -1) {
-            globalThis.data[globalThis.data_i]["response"][question_i] = 0;
+    $("#q_" + title_i.toString()).on('click', function () {
+        if (globalThis.data_now["response"][title_i] == -1) {
+            globalThis.data_now["response"][title_i] = 0;
 
             let val = parseInt($(this).val() as string);
             console.log(val)
-            let slider_obj_val = $("#q_" + question_i.toString() + "_val");
-            slider_obj_val.text(num_to_answer(val))
+            let slider_obj_val = $("#q_" + title_i.toString() + "_val");
+            slider_obj_val.text(val)
         }
     });
 }
 
 function setup() {
-    $("#q_comment").on("input change", function () {
-        let val = $(this).val() as string
-        // set the last response to comment
-        let data_cur = globalThis.data[globalThis.data_i]
-        globalThis.data[globalThis.data_i]["response"][data_cur["response"].length - 1] = val
-    })
-
     // send current data
-    // load next image
-    $("#an_next").on("click", () => {
+    // load next abstract
+    $("#but_next").on("click", () => {
         globalThis.data_i += 1;
         if (globalThis.data_i >= globalThis.data.length) {
             alert("You completed the whole queue, thanks! Wait a few seconds to finish synchronization.");
             globalThis.data_i = 0;
         }
-
+        
+        globalThis.data_now = globalThis.data[globalThis.data_i];
         log_data()
-        load_cur_img()
+        load_cur_abstract()
     })
 
-    $("#an_prev").on("click", () => {
+    $("#but_prev").on("click", () => {
         globalThis.data_i -= 1;
         // modulo
         if (globalThis.data_i < 0) {
             globalThis.data_i = globalThis.data.length - 1;
         }
-
+        
+        globalThis.data_now = globalThis.data[globalThis.data_i];
         log_data()
-        load_cur_img()
+        load_cur_abstract()
     })
 }
 
 
-export { setup, load_cur_img }
+export { setup, load_cur_abstract }
