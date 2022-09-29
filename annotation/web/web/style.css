@@ -8,6 +8,7 @@
 
 #abstract_area {
     text-align: justify;
+    min-height: 300px;
 }
 
 #abstract_area, #gudelines_area {
@@ -22,6 +23,23 @@
     top: -5px;
 }
 
+#title_area_table tr {
+    height: 5ex;
+}
+
+
+#title_area_table tr:first-child {
+    font-weight: bold;
+}
+
+#title_area_table tr td:last-child {
+    text-align: center;
+}
+
+#title_area {
+    min-height: 250px;
+}
+
 #title_area {
     margin-top: 15px;
     border: 2px solid black;
@@ -30,7 +48,7 @@
     width: 100%;
 }
 
-input {
+input[type=number], input[type=range] {
     width: 80%;
 }
 

@@ -12,8 +12,7 @@ export async function load_data(): Promise<any> {
             contentType: 'application/text',
         }
     )
-
-    result = JSON.parse("[" + result.replace("\n", ",") + "]")
+    result = JSON.parse("[" + result.replaceAll("\n", ",") + "]")
     return result
 }
 
