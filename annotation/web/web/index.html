@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-control" content="public">
+    <!-- <meta name="viewport" content="width=device-width,initial-scale=0.9"> -->
+    <meta name="theme-color" content="#efefef">
+
+    <title>Diffusion Annotations</title>
+    <link rel="shortcut icon" href="#" />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href='https://fonts.googleapis.com/css?family=Roboto&display=swap'>
+    <link rel='stylesheet' type='text/css' href='style.css?r=0'>
+</head>
+
+<body style='text-align: center; margin-bottom: 20px; background-color: #f4f4f4;'>
+    <span style="margin-left: auto; margin-right: auto; font-size: x-large;">Diffusion Annotations</span>
+
+    <div id="settings" style="text-align: left; width: 700px; margin-left: auto; margin-right: auto; margin-top: 30px">
+        <div id="prompt_area">
+            <span>Prompt:&nbsp;&nbsp;</span>
+            <span id="prompt">
+                A capybara standing on top of another capybara
+            </span>
+            <br>
+            <br>
+            <span id="progress" style="font-size: small;">0/0</span>
+        </div>
+
+        <div id="generated_img">
+
+        </div>
+
+        <div id="an_area">
+            <div style="width: 100%" id="an_area_var">
+
+            </div>
+            <br>
+            <div>
+                <span style="width: 45%; position: relative; top: -25pt;">Further comments:</span>
+                <textarea id="q_comment"></textarea>
+            </div>
+
+            <input id="an_prev" type="button" value="Previous">
+            <input id="an_next" type="button" value="Next">
+        </div>
+
+        <div id="gudelines_area" style="margin-top:15px">
+            Annotation guidelines:
+            <ul>
+                <li>TODO</li>
+                <li>TODO.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- <script src='da-web.js?random=<?php echo filemtime('mmsg-web.js'); ?>'></script> -->
+    <script src='web-source.js?r=0'></script>
+</body>
+
+</html>
