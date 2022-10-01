@@ -4,7 +4,7 @@ function load_headers() {
     $("#progress").html(`
         <strong>Progress:</strong> ${globalThis.data_i + 1}/${globalThis.data.length},
         <strong>UID:</strong> ${globalThis.uid},
-        <strong>type:</strong> ${globalThis.data_now["type"]}
+        <strong>mode:</strong> ${globalThis.data_now["mode"]}
     `)
     $("#abstract").text(globalThis.data_now["abstract"])
 }
@@ -12,13 +12,13 @@ function load_headers() {
 function load_cur_abstract() {
     load_headers()
 
-    switch (globalThis.data_now["type"]) {
-        case "all_direct": load_cur_abstract_all_direct(); break;
+    switch (globalThis.data_now["mode"]) {
+        case "all_direct_noref": load_cur_abstract_all_direct(); break;
         case "all_direct_ref": load_cur_abstract_all_direct_ref(); break;
-        case "pair_direct": load_cur_abstract_all_direct(); break;
+        case "pair_direct_noref": load_cur_abstract_all_direct(); break;
         case "pair_direct_ref": load_cur_abstract_all_direct_ref(); break;
-        case "pair_rank": load_cur_abstract_rank_pair(); break;
-        case "all_rank": load_cur_abstract_all_rank(); break;
+        case "pair_rank_noref": load_cur_abstract_rank_pair(); break;
+        case "all_rank_noref": load_cur_abstract_all_rank(); break;
         case "all_rank_ref": load_cur_abstract_all_rank_ref(); break;
     }
 }
