@@ -4,8 +4,9 @@ import { DEVMODE } from './globals'
 let SERVER_DATA_ROOT = DEVMODE ? "http://127.0.0.1:9000/queues/" : "https://vilda.net/s/att/queues/"
 
 export async function load_data(): Promise<any> {
+    let random_v = `?v=${Math.random()}`;
     let result = await $.ajax(
-        SERVER_DATA_ROOT + globalThis.uid + ".jsonl",
+        SERVER_DATA_ROOT + globalThis.uid + ".jsonl" + random_v,
         {
             type: 'GET',
             contentType: 'application/text',
