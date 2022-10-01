@@ -1,5 +1,5 @@
 # Added by zouharvi
-/data
+/data_raw/
 /patches/00-secret.sh
 /queues/*
 

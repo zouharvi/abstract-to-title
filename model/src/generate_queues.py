@@ -25,6 +25,7 @@ MODES = [
     "pair_rank_noref", "pair_direct_noref", "pair_direct_ref",
     "all_rank_noref", "all_rank_ref", "all_direct_noref", "all_direct_ref",
 ]
+# TODO: refonly (don't show abstract?)
 
 for uid in UIDs[:2]:
     # shuffling
@@ -33,9 +34,11 @@ for uid in UIDs[:2]:
     random.seed(seed)
     random.shuffle(data_copy)
 
-    modes = random.choices(MODES, k=len(data))
+    # all modes appear at least once
+    modes = MODES + random.choices(MODES, k=len(data)-len(MODES))
+    random.shuffle(modes)
     queue_out = []
-    for mode, line in zip(modes, data):
+    for mode, line in zip(modes, data_copy):
         if mode in {"pair_rank_noref", "pair_direct_noref"}:
             combinations = list(itertools.combinations(enumerate(line["titles"]), 2))
             queue_out_micro = []
