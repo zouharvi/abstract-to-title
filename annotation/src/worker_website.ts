@@ -27,10 +27,10 @@ function load_cur_abstract_all_direct() {
     title_area_table.html("")
     title_area_table.append($("<tr><td>Title</td><td>Score</td></tr>"));
 
-    globalThis.data_now["titles"].forEach((title: string, title_i: number) => {
+    globalThis.data_now["titles_order"].forEach((title_order: number, title_i: number) => {
         let new_an = $(`
             <tr>
-                <td>• ${title}</td>
+                <td>• ${globalThis.data_now["titles"][title_order]}</td>
                 <td><span id="q_${title_i}_val">x</span><input id="q_${title_i}" type="range" min="0" max="4" step="1"></td>
             </tr>
         `)
@@ -65,18 +65,18 @@ function load_cur_abstract_all_direct_ref() {
         console.error(`The first in title in order is not 0 but ${globalThis.data_now["titles_order"][0]} and you requested reference comparison.`)
     }
 
-    globalThis.data_now["titles"].forEach((title: string, title_i: number) => {
+    globalThis.data_now["titles_order"].forEach((title_order: number, title_i: number) => {
         let new_an;
         if (title_i == 0) {
             new_an = $(`
             <tr>
-                <td>• <b>Reference:</b> ${title}</td><td>-</td>
+                <td>• <b>Reference:</b> ${globalThis.data_now["titles"][title_order]}</td><td>-</td>
             </tr>
         `)
         } else {
             new_an = $(`
                 <tr>
-                    <td>• ${title}</td>
+                    <td>• ${globalThis.data_now["titles"][title_order]}</td>
                     <td><span id="q_${title_i}_val">x</span><input id="q_${title_i}" type="range" min="0" max="4" step="1"></td>
                 </tr>
             `)
